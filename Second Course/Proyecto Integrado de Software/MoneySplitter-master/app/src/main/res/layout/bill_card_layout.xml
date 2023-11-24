@@ -1,0 +1,188 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardBill"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="25dp">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BillLinLay"
+        android:orientation="vertical">
+
+
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:orientation="horizontal">
+
+        <!-- Media -->
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Title, secondary and supporting text -->
+            <TextView
+                android:id="@+id/billNameText"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:text="@string/groupNameText"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="8dp">
+
+                <!-- Title, secondary and supporting text -->
+                <TextView
+                    android:id="@+id/billPriceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/billPriceText"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#CC000000"
+                    android:textSize="20dp"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/extraBillDataLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+            <!-- Media -->
+            <ImageView
+                android:id="@+id/groupDescTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corners_2dp_no_fill"
+                android:contentDescription="@string/groupImageViewTxt"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/logo" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <!-- Title, secondary and supporting text -->
+                <TextView
+                    android:id="@+id/billDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="marquee"
+                    android:maxLines="1"
+                    android:text="00/00/0000"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#E6000000"
+                    app:autoSizeTextType="uniform" />
+
+
+                <TextView
+                    android:id="@+id/billTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="marquee"
+                    android:maxLines="1"
+                    android:text="00:00"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#E6000000"
+                    app:autoSizeTextType="uniform" />
+
+
+                <TextView
+                    android:id="@+id/billPayerText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="marquee"
+                    android:maxLines="1"
+                    android:text="Pagó ..."
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#E6000000"
+                    app:autoSizeTextType="uniform" />
+
+                <Button
+                    android:id="@+id/billDetailsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rounded_corners_no_fill"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    android:text="Ver Detalles"
+                    android:textAllCaps="false"
+                    android:textColor="#7E000000"
+                    app:autoSizeTextType="uniform"
+                    app:backgroundTint="@null" />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#FAFAFA"
+    android:orientation="vertical"
+    tools:context=".view.NewGroupActivity">
+
+
+
+    <TextView
+        android:id="@+id/textNombreGrupo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="48dp"
+        android:labelFor="@id/editTextNombre"
+        android:text="@string/textNombreGrupo"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/editTextNombre"
+        android:layout_width="330dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_corners_plain_text"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNombreGrupo"
+        android:textColor="#000000"
+        android:padding="10dp"/>
+
+
+
+    <TextView
+        android:id="@+id/textDescGrupo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:labelFor="@id/editTextApellidos"
+        android:text="@string/textDescGrupo"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
+    <EditText
+        android:id="@+id/editTextDescGrupo"
+        android:layout_width="330dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_corners_plain_text"
+        android:ems="10"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textRepetirContraseña"
+        android:textColor="#000000"
+        android:padding="10dp"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/textImagenGrupo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:labelFor="@id/editTextCorreo"
+        android:text="@string/textImagenGrupo"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="317dp" />
+
+
+    <Button
+        android:id="@+id/addGroupImageButton"
+        android:layout_width="330dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_corners_plain_text"
+        android:backgroundTint="@null"
+        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:paddingLeft="5dp"
+
+        android:text="@string/addGroupImageButtonTxt"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/grey"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textRepetirContraseña" />
+
+
+
+    <TextView
+        android:id="@+id/textMiembros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:labelFor="@id/editTextMiembros"
+        android:text="@string/textMiembros"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCorreo" />
+
+
+
+
+    <RelativeLayout
+        android:layout_width="330dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        tools:layout_editor_absoluteY="484dp"
+
+         >
+
+        <EditText
+            android:id="@+id/editTextMiembros"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners_plain_text"
+            android:ems="10"
+            android:inputType="textPersonName|phone"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textCursorDrawable="@null"
+
+            tools:layout_editor_absoluteY="484dp" />
+
+        <ImageButton
+            android:id="@+id/addMemberButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/editTextMiembros"
+            android:layout_alignRight="@id/editTextMiembros"
+            android:layout_alignBottom="@id/editTextMiembros"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/ic_add_black_24dp"
+            android:text="@string/button" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/newMembersLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addFromContactButton"
+        android:layout_width="330dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_corners_plain_text"
+        android:backgroundTint="@null"
+        android:drawableRight="@drawable/baseline_perm_contact_calendar_24"
+        android:paddingRight="10dp"
+
+        android:text="Añadir desde Contactos"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="35dp"
+        android:background="#FAFAFA">
+
+    <ProgressBar
+        android:id="@+id/progress_loader_new_group"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="8dp"
+        android:indeterminateTint="@color/white"
+        android:progressTint="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonNewGroup"
+        app:layout_constraintEnd_toEndOf="@+id/buttonNewGroup"
+        app:layout_constraintStart_toStartOf="@+id/buttonNewGroup"
+        app:layout_constraintTop_toTopOf="@+id/buttonNewGroup" />
+
+        <Button
+            android:id="@+id/buttonNewGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_corners_weak"
+            android:gravity="center|center_horizontal"
+            android:text="@string/buttonNewGroupTxt"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,1038 @@
+@startuml
+'https://plantuml.com/class-diagram
+class viewmodel.UserViewModel {
++ ArrayList<OnGetUserListener> mOnGetUserListeners
+- String TAG
+- UserRepository mUserRepository
+- FirebaseStorage mStorage
++ void addOnGetUserListener(OnGetUserListener)
++ User getUser(String)
++ void addUser(String,String,String,String,String,String)
++ {static} String getContact(String)
++ {static} String getUserID(String)
+}
+
+class viewmodel.GroupViewModel {
++ ArrayList<OnGetUserListener> mOnGetUserListeners
++ ArrayList<OnGetGroupListener> mOnGetGroupListeners
+- String TAG
+- MutableLiveData<ArrayList<Group>> mGroups
+- MutableLiveData<ArrayList<Group>> mGroupsFull
+- GroupRepository mGroupRepository
+- UserRepository mUserRepository
+- GroupBillsRepository mBillRepository
+- MutableLiveData<ArrayList<Group>> mNewGroupsNoti
+- GroupRepository.OnLoadNewGroupsListener mOnLoadNewGroupsListener
+- GroupRepository.OnLoadGroupsListener mOnLoadGroupsListener
+- FirebaseStorage mStorage
++ void addOnGetUserListener(OnGetUserListener)
++ void addOnGetGroupListener(OnGetGroupListener)
++ User getUser(String)
++ LiveData<ArrayList<Group>> getGroups()
++ LiveData<ArrayList<Group>> getGroupsByUser(String)
++ LiveData<Integer> getHidPosition()
++ void setGroups(ArrayList<Group>)
++ void setGroupsFull(ArrayList<Group>)
++ void loadGroupsFromRepository()
++ void removeGroupFromHome(int)
++ Group getGroup(String)
++ addGroup(String, String, ArrayList<String>, String, Uri, GroupViewModel.CustomCallBack)
++ void filterGroupsBy(String)
++ addListenerFirebaseChanges(String)
++ addListenerFirebaseNotificationsChanges(userID, OnFirebaseChangesNewGroupsListener, OnFirebaseChangesNewBillsListener, OnFirebaseChangesNewSettleDebtsListener)
++ deleteGroup(String)
++ linkGroupToUser(String, String)
++ deleteNewGroupNoti(String, String)
++ LiveData<ArrayList<Group>> getNewGroupsNoti()
++ void setNewGroupsNoti(ArrayList<Group>)
++ void loadNewGroupsFromRepository(String)
+}
+
+class viewmodel.BillMembersViewModel {
+- String TAG
+- MutableLiveData<ArrayList<UserBill>> mBillMembers
+- GroupBillsRepository mBillRepository
+
+- FirebaseStorage mStorage
++ LiveData<ArrayList<UserBill>> getBillMembers()
++ setBillMembers(ArrayList<UserBill> bills)
++ loadBillMemebersFromRepository(String billID)
+}
+
+class viewmodel.BillViewModel {
+- String TAG
+
+- MutableLiveData<ArrayList<Bill>> mBills
+- GroupBillsRepository mBillRepository
+- FirebaseStorage mStorage
+- GroupBillsRepository.OnLoadGroupBillsIDListener ls
+- MutableLiveData<ArrayList<Bill>> mNewBillsNoti
+- GroupBillsRepository.OnLoadNewBillsListener mOnLoadNewBillsListener
+- MutableLiveData<ArrayList<Pair<String, String>>> mBalance
+- SettleGroupBills.OnGetDebtsListener mBalanceListener
+- SettleGroupBills.OnSettldDebtsListener pendingDebtsListener
+- MutableLiveData<ArrayList<MemberDebt>> mNewPendingPaysNoti
+- SettleGroupBills.OnSettldDebtsListener recievedDebtsListener
+- MutableLiveData<ArrayList<MemberDebt>> mNewRecievedPaysNoti
+- SettleGroupBills mDebtsRepository
++ LiveData<ArrayList<Bill>> getBills()
++ void setBills(ArrayList<Bill>)
++ void loadBillsFromRepository(String)
++ Group getGroup(String)
++ void filterGroupsBy(String)
++ createBill(Map<String, String>, String, Uri, String, String, String, String, BillViewModel.CustomCallBack)
++ createBillUsers(Map<String, Boolean>, String, Uri, String, String, String, String, String, BillViewModel.CustomCallBack)
++ LiveData<ArrayList<Pair<String, String>>> getBalance()
++ setBalance(ArrayList<Pair<String, String>>)
++ void loadBalanceFromRepository(String, ArrayList<String>)
++ deleteNewBillNoti(String, String)
++ LiveData<ArrayList<Bill>> getNewBillsNoti()
++ void setNewBillsNoti(ArrayList<Bill>)
++ void loadNewBillsFromRepository(String)
++ addListenerFirebaseChanges(String, ArrayList<String>)
++ void deleteBill(String)
++ void settleBills(String, String,  BillViewModel.OnSettldDebtsListener)
++ deleteNewPendingPaysNoti(MemberDebt)
++ LiveData<ArrayList<MemberDebt>> getNewPendingPaysNoti()
++ setNewPendingPaysNoti(ArrayList<MemberDebt>)
++ loadNewPendingPaysFromRepository(String)
++ LiveData<ArrayList<MemberDebt>> getNewRecievedPaysNoti()
++ void loadNewRecievedPaysFromRepository(String)
++ void listenToCurrentGroup(String, OnFirebaseChangesListener)
+
+}
+
+class viewmodel.HistorialsViewModel {
+- String TAG
+
+- MutableLiveData<ArrayList<Map<String, String>>> mPayments
+- SettleGroupBills.OnGetPayHistorialListener mPaymentsListener
+- SettleGroupBills settleRepository
+- MutableLiveData<ArrayList<Bill>> mHistBills
+- GroupBillsRepository.OnLoadUserFilteredBillsListener mHistBillsListener
+- GroupBillsRepository mBillsRepository
+- MutableLiveData<ArrayList<Map<String, String>>> mGroupsByDate
+- GroupRepository.OnGroupsExpensesListener mGroupByDateListener
+- GroupRepository mGroupRepository
+- OnGetExpensesTotalListener mOnGetExpensesTotalListener
++ HistorialsViewModel(Application)
++ LiveData<ArrayList<Map<String, String>>> getPayments()
++ void setPayments(ArrayList<Map<String, String>>)
++ void loadPaymentsFromRepository(String)
++ LiveData<ArrayList<Bill>> getHistBills()
++ void setHistBills(ArrayList<Bill> bills)
++ void loadBillsHistFromRepository(String userID)
++ void setOnGetExpensesTotalListener(OnGetExpensesTotalListener listener)
++ LiveData<ArrayList<Map<String, String>>> getGroupsByDate()
++ void setGroupByDate(ArrayList<Map<String, String>> hist)
++ void loadGroupsByDateFromRepository(String userID, String filter)
+}
+
+
+
+
+
+
+class model.UserBill {
+- String userID
+- User user
+- Bill bill
+- String billID
+- float userBill
++ UserBill(String userID, String billID, float userBill)
++ String getUserID()
++ String getBillID()
++ float getUserBillAmount()
+}
+
+class view.BillDetailsActivity {
+- TextView mCardName
+- TextView mCardPrice
+- TextView mCardDate
+- TextView mCardHour
+- TextView mCardPayer
+- Bill mBill
+- ImageView mCardImage
+- RecyclerView mBillMembersCardsRV
+- BillMemberCardAdapter mBillMemberCardRVAdapter
+- BillMembersViewModel mBillMembersViewModel
+# void onCreate(Bundle)
+- void UserBillRecyclerInit()
+- void setViewData()
+- void getViewItems()
+}
+class view.BillMemberCardAdapter {
+- ArrayList<UserBill> mUsers
++ BillMemberCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(BillMemberCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setBill(ArrayList<UserBill>)
++ void updateBills()
++ void hideBill(int)
+}
+
+
+class view.BillCardAdapter {
+- ArrayList<Bill> mBills
+- BillCardAdapter.OnClickListener mOnClickListener
+- BillCardAdapter.OnLongClickListener mOnLongClickListener
+- BillCardAdapter.OnClickDetailsListener mOnClickDetailsListener
++ void setOnClickListener(BillCardAdapter.OnClickListener)
++ void setOnLongClickListener(BillCardAdapter.OnLongClickListener)
++ void setOnClickDetailsListener(BillCardAdapter.OnClickDetailsListener)
++ BillCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(BillCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setBill(ArrayList<Bill>)
++ void updateBills()
++ void hideBill(int)
+}
+
+
+class view.SignUpActivity {
+- {static} int TEXT_REQUEST
+- String TAG
+- FirebaseAuth mAuth
+- UserViewModel mUserViewModel
+- Button mSignUpButton
+- EditText mName
+- EditText mLastName
+- EditText mPrefTLF
+- EditText mTLF
+- EditText mMail
+- EditText mPswd
+- EditText mRePswd
+- ProgressBar mProgressBar
+# void onCreate(Bundle)
+- boolean pswdValid(String)
+- void signUpCheckPhone(String,String,String,String,String,String,String)
++ void onActivityResult(int,int,Intent)
+- void signUp(PhoneAuthCredential,String,String,String,String,String,String,String)
+- void createUser(String,String,String,String,String,String,String)
+}
+class model.GroupBillsRepository {
+- {static} String TAG
+- {static} GroupBillsRepository mInstance
+- FirebaseFirestore mDb
++ ArrayList<GroupBillsRepository.OnLoadGroupBillsListener> mOnLoadGroupBillsListeners
++ ArrayList<GroupBillsRepository.OnLoadGroupBillsIDListener> mOnLoadGroupBillsIDListeners
++ ArrayList<GroupBillsRepository.OnFirebaseChangesListener> mOnFirebaseChangesListener
++ ArrayList<GroupBillsRepository.OnLoadNewBillsListener> mOnLoadNewBillsNotiListeners
++ ArrayList<GroupBillsRepository.OnLoadUserBillsListener> mOnLoadUserBillsListeners
+~ ArrayList<String> groupsBills
+~ GroupBillsRepository.OnFirebaseChangesListener mOnFirebaseBillsChangesListener
++ void deleteBill(String)
++ void deleteBillAux(String)
++ void createBill(Map<String,String>,String,Uri,String,String,String,String,GroupBillsRepository.CustomCallBack)
+- void getURL(Map<String,Object>,String,Map<String,String>,String,Uri,String,String,String,String,GroupBillsRepository.CustomCallBack,StorageReference)
++ void createBillAux(Map<String,Object>,String,Map<String,String>,String,Uri,String,String,String,String)
++ void createBill(Map<String,Boolean>,String,Uri,String,String,String,String,String,GroupBillsRepository.CustomCallBack)
+- int getItemsNum(Boolean,Map<String,Boolean>)
++ void listenFirebaseChangesNewBills(String,GroupBillsRepository.OnFirebaseChangesNewBillsListener)
++ void addOnFirebaseChangesListener(GroupBillsRepository.OnFirebaseChangesListener)
++ void addOnLoadNewBillsListener(GroupBillsRepository.OnLoadNewBillsListener)
++ void addOnLoadUserBillsListener(GroupBillsRepository.OnLoadUserBillsListener)
++ {static} GroupBillsRepository getInstance()
++ void addOnLoadGroupBillsListener(GroupBillsRepository.OnLoadGroupBillsListener)
++ void addOnLoadGroupBillsIDListener(GroupBillsRepository.OnLoadGroupBillsIDListener)
++ void setGroupBillsbyID(String)
++ void loadGroupBills(ArrayList<Bill>)
++ void loadUserBills(ArrayList<Bill>,String,GroupBillsRepository.OnLoadUserFilteredBillsListener)
++ void getBillMembersPays(ArrayList<UserBill>,String)
++ void deleteNewBillNoti(String,String)
+- void addNewBillNoti(ArrayList<String>,String,String,String,String,String,String)
+- void updateNewBillNoti(String,ArrayList<Map<String,String>>)
++ void loadNewBillsNoti(ArrayList<Bill>,String,GroupBillsRepository.OnLoadNewBillsListener)
++ void listenFirebaseChanges(String,GroupBillsRepository.OnFirebaseChangesListener)
++ void listenFirebaseChangesAux(String,GroupBillsRepository.OnFirebaseChangesListener)
++ void listenFirebaseBillChanges(String,GroupBillsRepository.OnFirebaseChangesListener)
+}
+
+class model.UserRepository {
+- {static} String TAG
+- FirebaseAuth mAuth
+- {static} UserRepository mInstance
+- FirebaseFirestore mDb
++ ArrayList<OnLoadUsersListener> mOnLoadUsersListeners
++ ArrayList<OnLoadUserTokens> mOnLoadUserTokensListeners
++ void updateURL(Uri,String,EditProfileActivity.CustomCallBack)
++ {static} UserRepository getInstance()
++ void addOnLoadUsersListener(OnLoadUsersListener)
++ void addOnLoadUserTokensListeners(OnLoadUserTokens)
++ void addUser(String,String,String,String,String,String)
++ void setUserNotifications(String)
++ void getUser(Map<String,String>,String)
+}
+
+class view.MainActivity {
+- {static} int REQUEST_READ_CONTACTS
+- {static} int REQUEST_INTERNET
+- {static} int REQUEST_ACCESS_NETWORK
+- Button mLoginButton
+- Button mSignupButton
+- Button mTerminosButton
+# void onCreate(Bundle)
++ void loadContacts()
++ void onRequestPermissionsResult(int,String[],int[])
++ String formatPhoneNum(String)
+}
+
+class view.NewGroupActivity {
+- {static} int REQUEST_READ_CONTACTS
+- {static} int REQUEST_READ_STORAGE
+- {static} int REQUEST_CAMERA
+- LinearLayout mNewMembersLayout
+- ImageButton mAddMemberButton
+- EditText mEditTextNombre
+- EditText mEditTextDescGrupo
+- EditText mEditTextMiembros
+- Button mButtonNewGroup
+- Button mImageGroup
+- Button mAddFromContactButton
+- ArrayList<String> newGroupMembers
+- GroupViewModel mGroupViewModel
+- String userID
+- FirebaseStorage storage
+- ProgressBar mProgressBar
+- Uri uri
+- String[] opciones
+- File photoFile
+# void onCreate(Bundle)
+- File createImageFile()
+- void dispatchTakePictureIntent()
++ void onRequestPermissionsResult(int,String[],int[])
+# void onActivityResult(int,int,Intent)
+- Bitmap rotateIfNecessary(Bitmap)
++ {static} int getCameraPhotoOrientation(Context,String)
+- {static} Bitmap rotateImage(Bitmap,int)
++ String formatPhoneNum(String)
+- void getViewItems()
+- void addMember(String)
+- boolean numberValid(String)
+}
+class view.GroupActivity {
+- Button mBalanceButton
+- Button mBillsButton
+- Button mSettledDebtsButton
+- String groupID
+- String userID
+- BillViewModel mBillViewModel
+- Group mGroup
+- ImageView mGroupImage
+- TextView mGroupName
+- TextView mGroupDesc
+# void onCreate(Bundle)
+- void loadViewGroupData()
++ String getgroupID()
++ Group getgroup()
++ BillViewModel getViewModel()
++ String getuserID()
+}
+class model.Group {
+- Button mBalanceButton
+- Button mBillsButton
+- Button mSettledDebtsButton
+- String groupID
+- String userID
+- BillViewModel mBillViewModel
+- Group mGroup
+- ImageView mGroupImage
+- TextView mGroupName
+- TextView mGroupDesc
+# void onCreate(Bundle)
+- void loadViewGroupData()
++ String getgroupID()
++ Group getgroup()
++ BillViewModel getViewModel()
++ String getuserID()
+}
+class view.EditProfileActivity {
+- {static} int REQUEST_READ_STORAGE
+- {static} int REQUEST_CAMERA
+- Uri uri
+- String[] opciones
+- File photoFile
+- FirebaseStorage storage
+- FirebaseFirestore mDb
+- UserViewModel mUvm
+- User mUser
+- ImageButton mBack
+- Button mNewImage
+- Button mContra
+- Button mNotificacions
+- Button mClose
+- Button mEliminate
+- ImageView mImage
+# void onCreate(Bundle)
+- File createImageFile()
+- void dispatchTakePictureIntent()
++ void onRequestPermissionsResult(int,String[],int[])
+# void onActivityResult(int,int,Intent)
+- Bitmap rotateIfNecessary(Bitmap)
++ {static} int getCameraPhotoOrientation(Context,String)
+- {static} Bitmap rotateImage(Bitmap,int)
+- void saveImage()
+- void getURL(StorageReference)
+- void paintImageView()
++ void onBackPressed()
+}
+class model.Bill {
+- String billId
+- String name
+- float price
+- String date
+- String hour
+- String payerID
+- String groupName
+- String pictureUrl
+- boolean settled
++ String getName()
++ float getPrice()
++ String getID()
++ String getDate()
++ String getHour()
++ String getPayerName()
++ String getGroupName()
++ void setGroupID(String)
++ boolean isSettled()
++ String getPictureUrl()
+}
+class model.GroupRepository {
+- {static} String TAG
+- {static} GroupRepository mInstance
+- FirebaseFirestore mDb
+- FirebaseStorage storage
+- int mSuccess
+~ ArrayList<String> userGroups
++ ArrayList<GroupRepository.OnLoadGroupListener> mOnLoadGroupListeners
++ ArrayList<GroupRepository.OnLoadNewGroupsListener> mOnLoadNewGroupsNotiListeners
++ ArrayList<GroupRepository.OnFirebaseChangesListener> mOnFirebaseChangesListener
++ ArrayList<OnLoadGroupsListener> mOnLoadGroupsListeners
++ ArrayList<GroupRepository.OnLoadUserGroupsIDListener> mOnLoadUserGroupsIDListeners
++ OnLoadGroupPictureUrlListener mOnLoadUserPictureUrlListener
++ void deleteGroup(String)
++ void deleteGroupAux(String)
++ void deleteBill(String,CustomCallBack)
++ int addGroup(String,String,ArrayList<String>,String,Uri,CustomCallBack)
+- void addGroupAux(SimpleDateFormat,Date,Map<String,Object>,String,String,String,ArrayList<String>,String,Uri,CustomCallBack)
+- void getURL(SimpleDateFormat,Date,Map<String,Object>,String,String,String,ArrayList<String>,String,CustomCallBack,StorageReference)
+- void addGroupFirebaseCompletion(SimpleDateFormat,Date,Map<String,Object>,String,String,String,ArrayList<String>,String,CustomCallBack)
++ void groupExists(String,CustomCallBack)
++ void updateGroupMembers(String,String)
++ void loadNewGroupsNoti(ArrayList<Group>,String,GroupRepository.OnLoadNewGroupsListener)
++ void listenFirebaseChanges(String,OnFirebaseChangesListener)
++ void linkGroupToUser(String,String)
+- void updateMembers(String,ArrayList<String>)
+- void updateUserGroups(String,ArrayList<String>)
++ void deleteNewGroupNoti(String,String)
+- void updateNewGroupNoti(String,ArrayList<Map<String,String>>)
++ void listenFirebaseChangesNewGroups(String,GroupRepository.OnFirebaseChangesNewGroupsListener)
++ void addOnLoadGroupListener(GroupRepository.OnLoadGroupListener)
++ void addOnLoadNewGroupsListener(GroupRepository.OnLoadNewGroupsListener)
++ void addOnFirebaseChangesListener(GroupRepository.OnFirebaseChangesListener)
++ {static} GroupRepository getInstance()
++ void addOnLoadUsersListener(OnLoadGroupsListener)
++ void addOnLoadUserGroupsIDListener(GroupRepository.OnLoadUserGroupsIDListener)
++ void loadGroups(ArrayList<Group>)
++ void setUserGroupsbyID(String,OnLoadUserGroupsIDListener)
++ void loadUserGroupsbyID(ArrayList<Group>,OnLoadGroupsListener)
+- void setSuccess(int)
++ void getGroup(Map<String,Object>,String,GroupRepository.OnLoadGroupListener)
+- void getGroupExpensesAux(String,String,ArrayList<Map<String,String>>,OnGroupsExpensesListener)
+- Map<String,Map<String,String>> getIdDataFormat(ArrayList<Map<String,String>>)
++ void getGroupsExpenses(String,String,ArrayList<Map<String,String>>,OnGroupsExpensesListener)
++ void listenGroupChanges(String,GroupRepository.OnFirebaseChangesListener)
+}
+
+class view.ProfileActivity {
+~ User mUser
+- ImageButton mHome
+- TextView mNombre
+- TextView mId
+- Button mEditProfile
+- TextView mCorreu
+- TextView mTLF
+- Button mGastos
+- Button mPagos
+- Button mApoyar
+- Button mBillsHistoral
+- Button mPaymentsHistoral
+- ImageView mImage
+# void onCreate(Bundle)
+# void onActivityResult(int,int,Intent)
+- void paintImageView()
+}
+class view.HomeActivity {
+- User mUser
+- String userID
+- ImageView mImage
+- GroupViewModel mGroupViewModel
+- UserViewModel mUserViewModel
+- TextView mTextBenvinguda
+- RecyclerView mGroupCardsRV
+- GroupCardAdapter mGroupCardRVAdapter
+- FirebaseAuth mAuth
+~ View home_groups
+- FloatingActionButton mNewGroup
+- ImageButton mSearchBtn
+- ImageView mPerfil
+- EditText mSearchFilter
+- ConstraintLayout mNotifiacions
+- ConstraintLayout mNotifiacionsAction
+- LinearLayout currentLayout
+- Button newGroupsNoti
+- Button newBillsNoti
+- Button newPendingPaysNoti
+- Button newRecievedPaysNoti
+# void onCreate(Bundle)
+- void paintImageView(String)
+- void setNotificationButtons()
+- void showUnshowNotifications()
++ String getUserID()
++ GroupViewModel getViewModel()
+# void onResume()
+- void updatePersonalData()
+}
+class view.ConfirmMobileActivity {
+- Button mConfirmButton
+- EditText mCodeVerif
+- FirebaseAuth mAuth
+- String TLF
+- String prefTLF
+- String verifID
+# void onCreate(Bundle)
++ void returnReply()
+}
+class view.LogInActivity {
+- Button mLoginButton
+- String TAG
+- FirebaseAuth mAuth
+- EditText mIDText
+- EditText mPasswordText
+- UserViewModel mUserViewModel
+- ProgressBar mProgressBar
+# void onCreate(Bundle)
++ void logIn(String,String)
+- void addUserToken(String)
+}
+class view.BillsFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- BillViewModel mBillViewModel
+- Group mGroup
+- RecyclerView mBillCardsRV
+- BillCardAdapter mBillCardRVAdapter
+- FloatingActionButton mAddNewBillButton
++ {static} BillsFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onViewCreated(View,Bundle)
+}
+
+class view.GroupCardAdapter {
+- ArrayList<Group> mGroups
+- OnClickListener mOnClickListener
+- OnLongClickListener mOnLongClickListener
++ void setOnClickListener(OnClickListener)
++ void setOnLongClickListener(OnLongClickListener)
++ void setGroups(ArrayList<Group>)
++ GroupCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(GroupCardAdapter.ViewHolder,int)
++ int getItemCount()
+}
+
+class view.ChangePasssword {
+- User mUser
+- TextView mPswText
+- EditText mPsw
+- TextView mNewPswText
+- EditText mNewPswd
+- TextView mRePswText
+- EditText mRePswd
+- Button mCambiar
+# void onCreate(Bundle)
+- boolean pswdValid(String)
+}
+
+
+class model.User {
+- String mId
+- String mFirstName
+- String mLastName
+- String mTlf
+- String mMail
+- String mPictureURL
+- String mPswd
++ String getFirstName()
++ String getId()
++ String getLastName()
++ String getTLF()
++ String getMail()
++ String getURL()
++ String getPswd()
++ void setFirstName(String)
++ void setLastName(String)
++ void setTLF(String)
++ void setMail(String)
++ void setUrl(String)
++ void setPswd(String,ChangePasswordActivity.CustomCallBack)
+}
+
+
+
+
+class view.NewGroupsDialogCardAdapter {
+- ArrayList<Group> mGroups
+- NewGroupsDialogCardAdapter.OnClickListener mOnClickListener
+- NewGroupsDialogCardAdapter.OnClickAcceptListener mOnClickAcceptListener
+- NewGroupsDialogCardAdapter.OnClickDeclineListener mOnClickDeclineListener
++ void setOnClickAcceptListener(NewGroupsDialogCardAdapter.OnClickAcceptListener)
++ void setOnClickDeclineListener(NewGroupsDialogCardAdapter.OnClickDeclineListener)
++ NewGroupsDialogCardAdapter.ViewHolderDialog onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(NewGroupsDialogCardAdapter.ViewHolderDialog,int)
++ int getItemCount()
++ void deleteItem(int)
+}
+
+class model.SettleGroupBills {
+- {static} String TAG
+- {static} SettleGroupBills mInstance
+- FirebaseFirestore mDb
++ ArrayList<SettleGroupBills.OnSettldDebtsListener> mOnSettldDebtsListener
++ {static} SettleGroupBills getInstance()
++ void listenFirebaseChangesSettleDebts(String,SettleGroupBills.OnFirebaseChangesNewSettleDebtsListener)
++ void getGroupDebts(String,OnSettldDebtsListener)
+- void sendSettledDataNoti(MemberDebt)
++ void getPendingPaysNoti(String,OnSettldDebtsListener)
++ void getRecivedPaysNoti(String,OnSettldDebtsListener)
++ void deleteSettledDataNoti(MemberDebt)
+- void addPaymentHistoral(MemberDebt)
++ void getPaymentsHistorial(ArrayList<Map<String,String>>,String,OnGetPayHistorialListener)
++ void getGroupBalance(ArrayList<String>,SettleGroupBills.OnGetDebtsListener)
++ void getGroupBalance(ArrayList<String>,String,SettleGroupBills.OnGetDebtsListener)
+- void getGroupBalanceWithZeros(ArrayList<String>,ArrayList<String>,OnGetDebtsListener)
++ void getGroupBalanceSettlingBills(String,ArrayList<String>,SettleGroupBills.OnGetDebtsListener)
+- ArrayList<MemberDebt> balanceSetter(Map<String,Float>)
+- Pair<String,String> getMinMax(Map<String,Float>)
+}
+
+class view.BalanceCardAdapter {
+- ArrayList<Pair<String,String>> mBalance
++ BalanceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(BalanceCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setBalance(ArrayList<Pair<String,String>>)
++ void updateBalance()
++ void hideBalance(int)
+}
+
+class view.BalanceFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- BillViewModel mBillViewModel
+- Group mGroup
+- RecyclerView mBalanceCardsRV
+- BalanceCardAdapter mBalanceCardRVAdapter
++ {static} BalanceFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class view.NewBillUsersFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- LinearLayout mNewMembersLayout
+- Button mNewBillButton
+- EditText mTotalPrice
++ {static} NewBillUsersFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+- void addMemeber(String,Map<String,Boolean>)
+}
+
+class view.ExpensesActivity {
+- ImageView mPerfil
+- String userID
+- HistorialsViewModel mHistViewModel
+- GroupCardAdapter mExpenseCardRVAdapter
+- Button mListado
+- Button mAnalisis
+# void onCreate(Bundle)
++ String getuserID()
++ HistorialsViewModel getViewModel()
+}
+
+class view.NewPendingPaysDialogCardAdapter {
+- ArrayList<MemberDebt> mDebts
+- NewPendingPaysDialogCardAdapter.OnClickListener mOnClickListener
+- NewPendingPaysDialogCardAdapter.OnClickAcceptListener mOnClickAcceptListener
++ ArrayList<MemberDebt> getList()
++ void setItemsArrayList(ArrayList<MemberDebt>)
++ void setOnClickAcceptListener(NewPendingPaysDialogCardAdapter.OnClickAcceptListener)
++ NewPendingPaysDialogCardAdapter.ViewHolderDialog onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(NewPendingPaysDialogCardAdapter.ViewHolderDialog,int)
++ int getItemCount()
++ void deleteItem(int)
+}
+
+class view.GlobalAnalysisFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- ArrayList<String> al
+- String filtre
+- Spinner mSpinnerFilter
+- HistorialsViewModel mHistViewModel
+- RecyclerView mAnalysisGlobalCardsRV
+- GlobalAnalysisCardAdapter mAnalysisGlobalCardsRVAdapter
+- TextView analisisGlobalTotal
++ {static} GlobalAnalysisFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+
+class view.NewGroupsDialog {
+- GroupViewModel mGroupViewModel
+- RecyclerView mNewGroupsRV
+- NewGroupsDialogCardAdapter mNewGroupsRVAdapter
+~ View v
++ Dialog onCreateDialog(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class view.NewRecievedPaysDialogCardAdapter {
+- ArrayList<MemberDebt> mDebts
+- NewRecievedPaysDialogCardAdapter.OnClickListener mOnClickListener
+- NewRecievedPaysDialogCardAdapter.OnClickAcceptListener mOnClickAcceptListener
++ ArrayList<MemberDebt> getList()
++ void setItemsArrayList(ArrayList<MemberDebt>)
++ void setOnClickAcceptListener(NewRecievedPaysDialogCardAdapter.OnClickAcceptListener)
++ NewRecievedPaysDialogCardAdapter.ViewHolderDialog onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(NewRecievedPaysDialogCardAdapter.ViewHolderDialog,int)
++ int getItemCount()
++ void deleteItem(int)
+}
+class view.GlobalAnalysisCardAdapter {
+- ArrayList<Map<String,String>> mGroupsFiltered
++ GlobalAnalysisCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(GlobalAnalysisCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setGroupsFiltered(ArrayList<Map<String,String>>)
++ void updateGroupsFiltered()
++ void hideGroupsFiltered(int)
+}
+class view.PaymentsCardAdapter {
+- ArrayList<Map<String,String>> mPayments
++ PaymentsCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(PaymentsCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setPayments(ArrayList<Map<String,String>>)
++ void updateBalance()
++ void hideBalance(int)
+}
+
+class view.NewBillConfigFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- {static} int REQUEST_READ_STORAGE
+- {static} int REQUEST_CAMERA
+- Uri uri
+- String[] opciones
+- File photoFile
+~ NewBillActivity nba
+- String mParam1
+- String mParam2
+- {static} String REPARTIR_EQUIT
+- {static} String REPARTIR_PERSON
+- Spinner mSpinnerPayer
+- Spinner mSpinnerPayMethod
+- Button mNext
+- Button mImage
+- EditText mConcepto
++ {static} NewBillConfigFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onRequestPermissionsResult(int,String[],int[])
++ void onActivityResult(int,int,Intent)
+- File createImageFile()
++ void dispatchTakePictureIntent()
+# Bitmap rotateIfNecessary(Bitmap)
++ {static} int getCameraPhotoOrientation(Context,String)
+- {static} Bitmap rotateImage(Bitmap,int)
++ ArrayList<String> passToContacts(ArrayList<String>)
+}
+class model.SaveSharedPreference {
+~ {static} String LOGGED_IN_PREF
+~ {static} String NOTIFICATIONS_PREF
+~ {static} SharedPreferences getPreferences(Context)
++ {static} void setLoggedIn(Context,boolean,String,String)
++ {static} void setGroupsNotifications(Context,boolean,String)
++ {static} void setBillsNotifications(Context,boolean,String)
++ {static} void setPendingNotifications(Context,boolean,String)
++ {static} void setRecievedNotifications(Context,boolean,String)
++ {static} boolean getNotificationsStatus(Context)
++ {static} String getnewBills(Context)
++ {static} String getnewGroups(Context)
++ {static} String getrecievedPays(Context)
++ {static} String getpendentPays(Context)
++ {static} boolean getLoggedStatus(Context)
++ {static} String getUser(Context)
++ {static} String getPswd(Context)
+}
+
+class model.UserContactsLocal {
+- User u
+- String userID
+- Map<String,String> userContacts
+- Map<String,String> contactUsers
+- {static} UserContactsLocal ucl
++ void addContactUser(String,String)
++ String getContact(String)
++ String getUserID(String)
++ void setUserID(String)
++ {static} UserContactsLocal getInstance()
+}
+class view.NewPendingPaysDialog {
+- BillViewModel mBillViewModel
+- RecyclerView mNewPendingPaysRV
+- NewPendingPaysDialogCardAdapter mNewPendingPaysRVAdapter
+~ View v
++ Dialog onCreateDialog(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+
+class view.NewBillPersonalizedFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- LinearLayout mNewMembersLayout
+- Button mNewBillButton
++ {static} NewBillPersonalizedFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+- void addMemeber(String,Map<String,String>)
+}
+
+class view.NewBillsDialogCardAdapter {
+- ArrayList<Bill> mBills
+- NewBillsDialogCardAdapter.OnClickListener mOnClickListener
+- NewBillsDialogCardAdapter.OnClickAcceptListener mOnClickAcceptListener
++ void setOnClickAcceptListener(NewBillsDialogCardAdapter.OnClickAcceptListener)
++ NewBillsDialogCardAdapter.ViewHolderDialog onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(NewBillsDialogCardAdapter.ViewHolderDialog,int)
++ int getItemCount()
++ void deleteItem(int)
+}
+
+class model.MemberDebt {
+- String userID
+- float debt
+- String destUserID
+- String debtID
+- String date
++ String getUserID()
++ String getDestUserID()
++ String getUserDebt()
++ String getDebtID()
++ void setDebtID(String)
++ void setDate(String)
++ String getDate()
+}
+
+class model.GroupMembers {
+- ArrayList<String> groupMembers
++ ArrayList<String> getArray()
+}
+
+class view.PaymentsActivity {
+- ImageView mPerfil
+- HistorialsViewModel mHistViewModel
+- String userID
+- RecyclerView mPaymentCardsRV
+- PaymentsCardAdapter mPaymentCardAdapter
+- GroupCardAdapter mPaymentCardRVAdapter
+# void onCreate(Bundle)
+}
+
+class view.NewRecievedPaysDialog {
+- BillViewModel mBillViewModel
+- RecyclerView mNewRecievedPaysRV
+- NewRecievedPaysDialogCardAdapter mNewRecievedPaysRVAdapter
+~ View v
++ Dialog onCreateDialog(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+
+class view.NewBillActivity {
+- {static} int REQUEST_CAMERA
+- Group mGroup
+- Uri uri
+- String concepto
+- String payerID
+- BillViewModel mBillViewModel
+- String mUserID
++ Uri getUri()
+# void onCreate(Bundle)
++ void changeFragmentUsers()
++ void changeFragmentPersonalized()
++ Group getgroup()
++ void newBillDataUpdate(Uri,String,String)
++ void createBill(Map<String,String>)
++ void createBillUsers(Map<String,Boolean>,String)
+}
+
+class view.HistBillsListFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- HistorialsViewModel mHistViewModel
+- BillHistCardAdapter mBillHistCardRVAdapter
+- RecyclerView mBillHistCardRV
++ {static} HistBillsListFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+
+class view.NewBillsDialog {
+- BillViewModel mBillViewModel
+- RecyclerView mNewBillsRV
+- NewBillsDialogCardAdapter mNewBillsRVAdapter
+~ View v
++ Dialog onCreateDialog(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+
+class view.BillHistCardAdapter {
+- ArrayList<Bill> mBills
++ BillHistCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(BillHistCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setBill(ArrayList<Bill>)
++ void updateBills()
++ void hideBill(int)
+}
+
+view.NewGroupsDialogCardAdapter --> model.Group
+model.SettleGroupBills --> model.MemberDebt
+
+view.BalanceFragment --> model.Group
+view.BalanceFragment --> model.UserContactsLocal
+view.BalanceFragment --> viewmodel.BillViewModel
+view.BalanceFragment --> view.BalanceCardAdapter
+view.NewBillUsersFragment --> viewmodel.UserViewModel
+view.NewBillUsersFragment ..> model.Group
+view.NewBillPersonalizedFragment --> view.NewBillActivity
+view.ExpensesActivity --> view.HistBillsListFragment
+view.ExpensesActivity --> view.GlobalAnalysisFragment
+view.ExpensesActivity --> viewmodel.HistorialsViewModel
+
+view.NewPendingPaysDialogCardAdapter --> model.MemberDebt
+view.GlobalAnalysisFragment --> view.GlobalAnalysisCardAdapter
+view.NewGroupsDialog --> view.NewGroupsDialogCardAdapter
+view.NewGroupsDialog --> viewmodel.GroupViewModel
+view.NewRecievedPaysDialogCardAdapter --> model.MemberDebt
+
+
+view.NewBillConfigFragment --> view.NewBillActivity
+
+view.NewPendingPaysDialog --> view.NewPendingPaysDialogCardAdapter
+view.NewBillPersonalizedFragment --> view.NewBillActivity
+view.NewBillPersonalizedFragment --> viewmodel.UserViewModel
+
+view.NewBillsDialogCardAdapter --> model.Bill
+
+view.PaymentsActivity --> view.PaymentsCardAdapter
+view.PaymentsActivity --> viewmodel.HistorialsViewModel
+
+view.NewRecievedPaysDialog --> view.NewRecievedPaysDialogCardAdapter
+view.NewBillActivity --> view.NewBillConfigFragment
+view.NewBillActivity --> view.NewBillPersonalizedFragment
+view.NewBillActivity --> view.NewBillUsersFragment
+view.NewBillActivity --> viewmodel.BillViewModel
+view.NewBillActivity --> model.Group
+
+view.HistBillsListFragment ..> model.Bill
+view.HistBillsListFragment --> viewmodel.HistorialsViewModel
+view.HistBillsListFragment --> view.BillHistCardAdapter
+
+view.NewBillsDialog --> view.NewBillsDialogCardAdapter
+view.NewBillsDialog ..> model.Bill
+view.BillHistCardAdapter --> model.Bill
+
+
+
+
+
+
+
+
+view.SignUpActivity --> viewmodel.UserViewModel
+view.SignUpActivity ..> view.LogInActivity
+view.ProfileActivity --> model.User
+view.ProfileActivity ..> view.EditProfileActivity
+view.ProfileActivity ..> view.HomeActivity
+view.NewGroupActivity --> model.User
+view.NewGroupActivity --> viewmodel.GroupViewModel
+view.MainActivity ..> view.LogInActivity
+view.MainActivity ..> view.SignUpActivity
+view.MainActivity --> model.SaveSharedPreference
+view.LogInAcivity --> viewmodel.UserViewModel
+view.LogInAcivity ..> view.HomeActivity
+view.LogInAcivity --> model.SaveSharedPreference
+view.HomeActivity --> viewmodel.GroupViewModel
+view.HomeActivity --> model.User
+view.HomeActivity ..> model.Group
+view.HomeActivity ..> view.GroupCardAdapter
+view.HomeActivity ..> view.NewGroupActivity
+view.HomeActivity ..> view.ProfileActivity
+view.HomeActivity ..> view.GroupActivity
+view.GroupCardAdapter --> model.Group
+view.GroupActivity --> viewmodel.BillViewModel
+view.GroupActivity --> model.Group
+view.GroupActivity --> view.BillsFragment
+view.GroupActivity --> view.BalanceFragment
+view.EditProfileActivity --> model.User
+view.EditProfileActivity ..> view.MainActivity
+view.EditProfileActivity ..> view.ProfileActivity
+view.EditProfileActivity ..> view.ChangePasssword
+view.ChangePasssword --> model.User
+view.BillsFragment --> model.Group
+view.BillsFragment --> model.UserContactsLocal
+view.BillsFragment --> viewmodel.BillViewModel
+view.BillsFragment --> view.BillCardAdapter
+view.BillsFragment ..> view.BillDetailsActivity
+view.BillsFragment ..> model.Bill
+view.BillMemberCardAdapter --> model.UserBill
+view.BillDetailsActivity --> view.BillMemberCardAdapter
+view.BillDetailsActivity --> viewmodel.BillMembersViewModel
+view.BillDetailsActivity --> model.Bill
+view.BillDetailsActivity ..> model.UserBill
+view.BillDetailsActivity --> model.UserContactsLocal
+view.BillCardAdapter --> model.Bill
+viewmodel.BillMembersViewModel --> model.UserBill
+viewmodel.BillMembersViewModel --> model.GroupBillsRepository
+viewmodel.BillViewModel --> model.Bill
+viewmodel.BillViewModel --> model.GroupBillsRepository
+viewmodel.GroupViewModel --> model.Group
+viewmodel.GroupViewModel --> model.GroupRepository
+viewmodel.UserViewModel --> model.User
+viewmodel.UserViewModel --> model.UserRepository
+model.UserRepository *--> model.User
+model.GroupRepository *--> model.Group
+model.GroupRepository *--> model.Bill
+
+
+
+
+
+
+viewmodel.HomeActivityViewModel --> model.User
+
+@enduml

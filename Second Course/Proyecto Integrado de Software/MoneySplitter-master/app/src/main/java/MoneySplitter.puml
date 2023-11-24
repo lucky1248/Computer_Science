@@ -1,0 +1,370 @@
+@startuml
+class ub.edu.moneysplitter.viewmodel.HomeActivityViewModel {
++ ArrayList<OnGetUserListener> mOnGetUserListeners
++ ArrayList<OnGetGroupListener> mOnGetGroupListeners
+- String TAG
+- MutableLiveData<ArrayList<Group>> mGroups
+- MutableLiveData<ArrayList<Group>> mGroupsFull
+- MutableLiveData<ArrayList<Bill>> mBills
+- MutableLiveData<String> mPictureUrl
+- MutableLiveData<Integer> mHidPosition
+- GroupRepository mGroupRepository
+- UserRepository mUserRepository
+- GroupBillsRepository mBillRepository
+- FirebaseStorage mStorage
++ void addOnGetUserListener(OnGetUserListener)
++ void addOnGetGroupListener(OnGetGroupListener)
++ User getUser(String)
++ void addUser(String,String,String,String,String,String)
++ LiveData<ArrayList<Group>> getGroups()
++ LiveData<ArrayList<Group>> getGroupsByUser(String)
++ LiveData<Integer> getHidPosition()
++ void setGroups(ArrayList<Group>)
++ void setGroupsFull(ArrayList<Group>)
++ void loadGroupsFromRepository()
++ void removeGroupFromHome(int)
++ LiveData<ArrayList<Bill>> getBills()
++ void setBills(ArrayList<Bill>)
++ void loadBillsFromRepository(String)
++ Group getGroup(String)
++ void filterGroupsBy(String)
+}
+interface ub.edu.moneysplitter.viewmodel.HomeActivityViewModel.OnGetUserListener {
+ void OnGetUser(User)
+}
+interface ub.edu.moneysplitter.viewmodel.HomeActivityViewModel.OnGetGroupListener {
+~ void OnGetGroup(Group)
+}
+class ub.edu.moneysplitter.view.BalanceFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
++ {static} BalanceFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class ub.edu.moneysplitter.model.GroupBillsLocal {
+~ Map<String,Bill> billsMap
+~ GroupBillsRepository gbr
++ void loadFromDB(String)
++ Bill getBill(String)
++ void loadBills(ArrayList<Bill>)
+}
+class ub.edu.moneysplitter.view.BillCardAdapter {
+- ArrayList<Bill> mBills
+- BillCardAdapter.OnClickListener mOnClickListener
++ void setOnClickListener(BillCardAdapter.OnClickListener)
++ BillCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(BillCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setBill(ArrayList<Bill>)
++ void updateBills()
++ void hideBill(int)
+}
+interface ub.edu.moneysplitter.view.BillCardAdapter.OnClickListener {
+~ void OnClick(int)
+}
+class ub.edu.moneysplitter.view.BillCardAdapter.ViewHolder {
+- TextView mCardName
+- TextView mCardPrice
+- MaterialCardView mCard
++ void bind(Bill,BillCardAdapter.OnClickListener)
+}
+class ub.edu.moneysplitter.view.SignUpActivity {
+- {static} int TEXT_REQUEST
+- String TAG
+- FirebaseAuth mAuth
+- HomeActivityViewModel mHomeActivityViewModel
+- Button mSignUpButton
+- EditText mName
+- EditText mLastName
+- EditText mPrefTLF
+- EditText mTLF
+- EditText mMail
+- EditText mPswd
+- EditText mRePswd
+# void onCreate(Bundle)
+- void signUpCheckPhone(String,String,String,String,String,String,String)
++ void onActivityResult(int,int,Intent)
+- void signUp(PhoneAuthCredential,String,String,String,String,String,String,String)
+- void createUser(String,String,String,String,String,String,String)
+}
+class ub.edu.moneysplitter.model.GroupBillsRepository {
+- {static} String TAG
+- {static} GroupBillsRepository mInstance
+- FirebaseFirestore mDb
++ ArrayList<GroupBillsRepository.OnLoadGroupBillsListener> mOnLoadGroupBillsListeners
++ ArrayList<GroupBillsRepository.OnLoadGroupBillsIDListener> mOnLoadGroupBillsIDListeners
++ GroupRepository.OnLoadGroupPictureUrlListener mOnLoadUserPictureUrlListener
+~ ArrayList<String> groupsBills
++ {static} GroupBillsRepository getInstance()
++ void addOnLoadGroupBillsListener(GroupBillsRepository.OnLoadGroupBillsListener)
++ void addOnLoadGroupBillsIDListener(GroupBillsRepository.OnLoadGroupBillsIDListener)
++ void setOnLoadUserPictureListener(GroupRepository.OnLoadGroupPictureUrlListener)
++ void setGroupBillsbyID(String)
++ void loadGroupBills(ArrayList<Bill>,String)
++ void addGroup(String,String,String,String)
+}
+interface ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupBillsListener {
+~ void onLoadGroupBills(ArrayList<Bill>)
+}
+interface ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupBillsIDListener {
+~ void onLoadGroupBillsID(ArrayList<String>)
+}
+interface ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupPictureUrlListener {
+~ void OnLoadGroupPictureUrl(String)
+}
+class ub.edu.moneysplitter.model.UserGroupsLocal {
+~ Map<String,Group> groupsMap
+~ GroupRepository gr
++ void loadFromDB(String)
++ Group getGroup(String)
+}
+class ub.edu.moneysplitter.model.UserRepository {
+- {static} String TAG
+- {static} UserRepository mInstance
+- FirebaseFirestore mDb
++ ArrayList<OnLoadUsersListener> mOnLoadUsersListeners
++ {static} UserRepository getInstance()
++ void addOnLoadUsersListener(OnLoadUsersListener)
++ void addUser(String,String,String,String,String,String)
++ void getUser(Map<String,String>,String)
+}
+interface ub.edu.moneysplitter.model.UserRepository.OnLoadUsersListener {
+~ void onLoadUsers(ArrayList<User>)
+}
+class ub.edu.moneysplitter.view.MainActivity {
+- Button mLoginButton
+- Button mSignupButton
+- Button mTerminosButton
+~ Group group
+~ ArrayList<String> groupsBills
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.model.BillMembers {
+}
+class ub.edu.moneysplitter.view.NewGroupActivity {
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.view.GroupActivity {
+- Button mBalanceButton
+- Button mBillsButton
+- String groupID
+- HomeActivityViewModel mHomeActivityViewModel
+- Group mGroup
+- ImageView mGroupImage
+- TextView mGroupName
+- TextView mGroupDesc
+# void onCreate(Bundle)
+- void loadViewGroupData()
++ String getgroupID()
++ HomeActivityViewModel getViewModel()
+}
+class ub.edu.moneysplitter.view.PaymentsActivity {
+- ImageButton mPerfil
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.model.Group {
+- String mId
+- String mName
+- String mDescription
+- String mDate
+- String mPictureURL
+~ GroupBillsLocal bills
++ String getDescription()
++ String getDate()
++ String getName()
++ String getURL()
++ String getID()
+}
+class ub.edu.moneysplitter.view.EditProfileActivity {
+- ImageButton mPerfil
+- Button mImage
+- Button mContra
+- Button mNotificacions
+- Button mClose
+- Button mEliminate
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.model.Bill {
+- String billId
+- String name
+- float price
+- BillMembers members
++ String getName()
++ float getPrice()
++ String getID()
+}
+class ub.edu.moneysplitter.model.GroupRepository {
+- {static} String TAG
+- {static} GroupRepository mInstance
+- FirebaseFirestore mDb
++ ArrayList<GroupRepository.OnLoadGroupListener> mOnLoadGroupListeners
++ ArrayList<OnLoadGroupsListener> mOnLoadGroupsListeners
++ ArrayList<GroupRepository.OnLoadUserGroupsIDListener> mOnLoadUserGroupsIDListeners
++ OnLoadGroupPictureUrlListener mOnLoadUserPictureUrlListener
+~ ArrayList<String> userGroups
++ void addOnLoadGroupListener(GroupRepository.OnLoadGroupListener)
++ {static} GroupRepository getInstance()
++ void addOnLoadUsersListener(OnLoadGroupsListener)
++ void addOnLoadUserGroupsIDListener(GroupRepository.OnLoadUserGroupsIDListener)
++ void setOnLoadUserPictureListener(OnLoadGroupPictureUrlListener)
++ void loadGroups(ArrayList<Group>)
++ void setGroupBillsbyID(String)
++ void loadUserGroupsbyID(ArrayList<Group>)
++ void addGroup(String,String,String,String)
++ void getGroup(Map<String,String>,String)
+}
+interface ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupListener {
+~ void OnLoadGroup()
+}
+interface ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupsListener {
+~ void onLoadGroups(ArrayList<Group>)
+}
+interface ub.edu.moneysplitter.model.GroupRepository.OnLoadUserGroupsIDListener {
+~ void onLoadUserGroupsID(ArrayList<String>)
+}
+interface ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupPictureUrlListener {
+~ void OnLoadGroupPictureUrl(String)
+}
+class ub.edu.moneysplitter.view.ProfileActivity {
+- ImageButton mHome
+- Button mEditProfile
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.view.HomeActivity {
+- User mUser
+- HomeActivityViewModel mHomeActivityViewModel
+- TextView mTextBenvinguda
+- RecyclerView mGroupCardsRV
+- GroupCardAdapter mGroupCardRVAdapter
+- FirebaseAuth mAuth
+~ View home_groups
+- FloatingActionButton mNewGroup
+- ImageButton mSearchBtn
+- ImageButton mPerfil
+- EditText mSearchFilter
+- ConstraintLayout mNotifiacions
+- ConstraintLayout mNotifiacionsAction
+- LinearLayout currentLayout
+# void onCreate(Bundle)
+- void showUnshowNotifications()
+}
+class ub.edu.moneysplitter.view.ConfirmMobileActivity {
+- Button mConfirmButton
+- EditText mCodeVerif
+- FirebaseAuth mAuth
+- String TLF
+- String prefTLF
+- String verifID
+# void onCreate(Bundle)
++ void returnReply()
+}
+class ub.edu.moneysplitter.view.ExpensesActivity {
+- ImageButton mPerfil
+# void onCreate(Bundle)
+}
+class ub.edu.moneysplitter.view.LogInActivity {
+- Button mLoginButton
+- String TAG
+- FirebaseAuth mAuth
+- EditText mIDText
+- EditText mPasswordText
+# void onCreate(Bundle)
+- void logIn(String,String)
+}
+class ub.edu.moneysplitter.view.BillsFragment {
+- {static} String ARG_PARAM1
+- {static} String ARG_PARAM2
+- String mParam1
+- String mParam2
+- HomeActivityViewModel mHomeActivityViewModel
+- Group mGroup
+- RecyclerView mBillCardsRV
+- BillCardAdapter mBillCardRVAdapter
++ {static} BillsFragment newInstance(String,String)
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class ub.edu.moneysplitter.view.GroupCardAdapter {
+- ArrayList<Group> mGroups
+- OnClickListener mOnClickListener
+- OnClickPictureListener mOnClickPictureListener
++ void setOnClickListener(OnClickListener)
++ void setOnClickPictureListener(OnClickPictureListener)
++ GroupCardAdapter.ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(GroupCardAdapter.ViewHolder,int)
++ int getItemCount()
++ void setUsers(ArrayList<Group>)
++ void updateUsers()
++ void hideUser(int)
+}
+interface ub.edu.moneysplitter.view.GroupCardAdapter.OnClickListener {
+~ void OnClick(String,int)
+}
+interface ub.edu.moneysplitter.view.GroupCardAdapter.OnClickPictureListener {
+~ void OnClickPicture(int)
+}
+class ub.edu.moneysplitter.view.GroupCardAdapter.ViewHolder {
+- ImageView mCardPictureUrl
+- TextView mCardName
+- TextView mCardDesc
+- TextView mCardDate
+- MaterialCardView mCard
++ void bind(Group,OnClickListener,OnClickPictureListener)
+}
+class ub.edu.moneysplitter.model.User {
+- String mId
+- String mFirstName
+- String mLastName
+- String mTlf
+- String mMail
+- String mPictureURL
++ String getFirstName()
++ String getLastName()
++ String getTLF()
++ String getMail()
++ String getURL()
++ void setFirstName(String)
++ void setLastName(String)
++ void setTLF(String)
++ void setMail(String)
++ void setUrl(String)
+}
+
+
+androidx.lifecycle.AndroidViewModel <|-- ub.edu.moneysplitter.viewmodel.HomeActivityViewModel
+ub.edu.moneysplitter.viewmodel.HomeActivityViewModel +.. ub.edu.moneysplitter.viewmodel.HomeActivityViewModel.OnGetUserListener
+ub.edu.moneysplitter.viewmodel.HomeActivityViewModel +.. ub.edu.moneysplitter.viewmodel.HomeActivityViewModel.OnGetGroupListener
+androidx.fragment.app.Fragment <|-- ub.edu.moneysplitter.view.BalanceFragment
+ub.edu.moneysplitter.view.Adapter <|-- ub.edu.moneysplitter.view.BillCardAdapter
+ub.edu.moneysplitter.view.BillCardAdapter +.. ub.edu.moneysplitter.view.BillCardAdapter.OnClickListener
+ub.edu.moneysplitter.view.BillCardAdapter +.. ub.edu.moneysplitter.view.BillCardAdapter.ViewHolder
+ub.edu.moneysplitter.view.ViewHolder <|-- ub.edu.moneysplitter.view.BillCardAdapter.ViewHolder
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.SignUpActivity
+ub.edu.moneysplitter.model.GroupBillsRepository +.. ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupBillsListener
+ub.edu.moneysplitter.model.GroupBillsRepository +.. ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupBillsIDListener
+ub.edu.moneysplitter.model.GroupBillsRepository +.. ub.edu.moneysplitter.model.GroupBillsRepository.OnLoadGroupPictureUrlListener
+ub.edu.moneysplitter.model.UserRepository +.. ub.edu.moneysplitter.model.UserRepository.OnLoadUsersListener
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.NewGroupActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.GroupActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.PaymentsActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.EditProfileActivity
+ub.edu.moneysplitter.model.GroupRepository +.. ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupListener
+ub.edu.moneysplitter.model.GroupRepository +.. ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupsListener
+ub.edu.moneysplitter.model.GroupRepository +.. ub.edu.moneysplitter.model.GroupRepository.OnLoadUserGroupsIDListener
+ub.edu.moneysplitter.model.GroupRepository +.. ub.edu.moneysplitter.model.GroupRepository.OnLoadGroupPictureUrlListener
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.ProfileActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.HomeActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.ConfirmMobileActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.ExpensesActivity
+androidx.appcompat.app.AppCompatActivity <|-- ub.edu.moneysplitter.view.LogInActivity
+androidx.fragment.app.Fragment <|-- ub.edu.moneysplitter.view.BillsFragment
+ub.edu.moneysplitter.view.Adapter <|-- ub.edu.moneysplitter.view.GroupCardAdapter
+ub.edu.moneysplitter.view.GroupCardAdapter +.. ub.edu.moneysplitter.view.GroupCardAdapter.OnClickListener
+ub.edu.moneysplitter.view.GroupCardAdapter +.. ub.edu.moneysplitter.view.GroupCardAdapter.OnClickPictureListener
+ub.edu.moneysplitter.view.GroupCardAdapter +.. ub.edu.moneysplitter.view.GroupCardAdapter.ViewHolder
+ub.edu.moneysplitter.view.ViewHolder <|-- ub.edu.moneysplitter.view.GroupCardAdapter.ViewHolder
+@enduml
