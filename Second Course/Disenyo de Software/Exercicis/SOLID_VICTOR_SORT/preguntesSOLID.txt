@@ -1,0 +1,11 @@
+Seguint els principis S.O.L.I.D., un dissenyador ha fet el diagrama de classes que veus, en el què es mostra un catàleg d'una tenda de cotxes de segona mà. Quin/s principi/s de disseny vulnera?
+
+​​​​​​​A) Vulnera el principi Single Responsability Principle
+​​​​​​B) Vulnera el principi Open Closed Principle
+*C) Vulnera els principis Dependency Inversion Principle i Open Closed Principle.
+​​​​​​​D) Vulnera els principi Dependency Inversion Principle i Single Responsability Principle.
+ANSWER: C
+
+Justificació: Aquest principi es vulnera ja que el pilot podria ser pilot d'un vehicle que no fos RacingCar. Es a dir Pilot depen de classes concretes i no classes abstractes-
+
+La solució seria instanciar l'atribut vehicle de la clarre Pilo com a Vehicle i en el seu constructor passar com a paràmetre un tipus Vehicle (sense fer el new dins del constructor)
